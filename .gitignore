@@ -1,7 +1,5 @@
-target/
-!.mvn/wrapper/maven-wrapper.jar
-!**/src/main/**/target/
-!**/src/test/**/target/
+# Không bỏ qua thư mục target/
+!target/
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
