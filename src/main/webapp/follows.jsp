@@ -5,7 +5,7 @@
 
         <head>
             <title>${listType == 'following' ? 'Đang theo dõi' : 'Người theo dõi'}</title>
-            <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+            <link rel="stylesheet" href="${pageContext.request.contextPath}style.css">
             <style>
                 .header {
                     display: flex;

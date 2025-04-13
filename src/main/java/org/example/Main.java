@@ -16,7 +16,6 @@ public class Main {
             // Thiết lập base directory
             String baseDir = new File("tomcat").getAbsolutePath();
             tomcat.setBaseDir(baseDir);
-
             // Thiết lập thư mục webapps
             String webappDirLocation = new File("src/main/webapp").getAbsolutePath();
             
@@ -31,8 +30,8 @@ public class Main {
 
             // Khởi động server
             tomcat.start();
-            System.out.println("=== Server Information ===");
-            System.out.println("Server started at http://localhost:8080");
+            System.out.println("=== Server chạy ===");
+            System.out.println("nhấn vào đây để hiển thị http://localhost:8080");
             System.out.println("Web application directory: " + webappDirLocation);
             System.out.println("Base directory: " + baseDir);
             System.out.println("=========================");
