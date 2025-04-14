@@ -31,3 +31,8 @@
 - Người dùng click nút đăng xuất
 - Hệ thống hủy session
 - Chuyển hướng về trang đăng nhập
+
+# TUTORIAL
+
+- import social_media into MySQLServer with "social_media" schema
+- change 'root' password to your 'root' password in package util/DatabaseConnection.java
