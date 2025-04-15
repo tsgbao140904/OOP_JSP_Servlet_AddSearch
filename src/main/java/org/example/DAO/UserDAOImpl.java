@@ -99,4 +99,31 @@ public class UserDAOImpl implements UserDAO {
         user.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
         return user;
     }
+
+    @Override
+    public List<User> searchByUsername(String query) {
+        List<User> users = new ArrayList<>();
+        String sql = "SELECT * FROM users WHERE username LIKE ?";
+        System.out.println("Executing searchByUsername with query: " + query);
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
+            statement.setString(1, "%" + query + "%");
+            System.out.println("SQL query: " + sql + ", param: %" + query + "%");
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+                User user = new User();
+                user.setId(resultSet.getLong("id"));
+                user.setUsername(resultSet.getString("username"));
+                user.setRole(resultSet.getString("role"));
+                user.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
+                users.add(user);
+                System.out.println("Found user: " + user.getUsername());
+            }
+            System.out.println("Found " + users.size() + " users for query: " + query);
+        } catch (SQLException e) {
+            System.err.println("SQLException in searchByUsername: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return users;
+    }
 }

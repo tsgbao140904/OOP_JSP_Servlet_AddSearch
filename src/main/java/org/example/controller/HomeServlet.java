@@ -39,6 +39,12 @@ public class HomeServlet extends HttpServlet {
         // Tác dụng: Nếu tham số page tồn tại và không rỗng, chuyển thành số nguyên để sử dụng
         if (pageStr != null && !pageStr.isEmpty()) {
             page = Integer.parseInt(pageStr);
+//            try {
+//                page = Integer.parseInt(pageStr);
+//                if (page < 1) page = 1;
+//            } catch (NumberFormatException e) {
+//                page = 1;
+//            }
         }
 
         // Tác dụng: Tính toán vị trí bắt đầu (offset) trong cơ sở dữ liệu dựa trên trang hiện tại
@@ -46,7 +52,18 @@ public class HomeServlet extends HttpServlet {
         int offset = (page - 1) * POSTS_PER_PAGE;
         // Tác dụng: Lấy danh sách bài viết từ cơ sở dữ liệu dựa trên offset, số lượng mỗi trang, và người dùng hiện tại
         List<Posts> posts = postsDAO.findAll(offset, POSTS_PER_PAGE, currentUser);
-
+//        List<Posts> posts;
+//        int totalPosts;
+//        try {
+//            posts = postsDAO.findAll(offset, POSTS_PER_PAGE, currentUser);
+//            totalPosts = postsDAO.countActivePosts();
+//            System.out.println("Loaded " + posts.size() + " posts for page " + page);
+//        } catch (Exception e) {
+//            System.err.println("Error loading posts: " + e.getMessage());
+//            request.setAttribute("error", "Không thể tải bài đăng.");
+//            posts = List.of();
+//            totalPosts = 0;
+//        }
         // Tác dụng: Lưu danh sách bài viết vào request để truyền sang trang JSP hiển thị
         request.setAttribute("posts", posts);
         // Tác dụng: Lưu số trang hiện tại vào request để JSP biết đang ở trang nào

@@ -28,10 +28,28 @@ public class PostsDAOImpl implements PostsDAO {
                 }
                 posts.add(post);
             }
+            System.out.println("Loaded " + posts.size() + " posts with limit=" + limit + ", offset=" + offset);
         } catch (SQLException e) {
+            System.err.println("Error loading posts: " + e.getMessage());
             e.printStackTrace();
         }
         return posts;
+    }
+
+    @Override
+    public int countActivePosts() {
+        String sql = "SELECT COUNT(*) FROM posts WHERE status = 'ACTIVE'";
+        try (Connection connection = databaseConnection.getConnection();
+             PreparedStatement statement = connection.prepareStatement(sql);
+             ResultSet resultSet = statement.executeQuery()) {
+            if (resultSet.next()) {
+                return resultSet.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error counting posts: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return 0;
     }
 
     @Override
@@ -105,7 +123,7 @@ public class PostsDAOImpl implements PostsDAO {
             statement.setTimestamp(3, Timestamp.valueOf(post.getUpdatedAt()));
             statement.setString(4, post.getStatus());
             statement.setLong(5, post.getId());
-            
+
             statement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,12 +137,12 @@ public class PostsDAOImpl implements PostsDAO {
         post.setBody(resultSet.getString("body"));
         post.setStatus(resultSet.getString("status"));
         post.setCreatedAt(resultSet.getTimestamp("created_at").toLocalDateTime());
-        
+
         // Lấy thông tin người dùng
         Long userId = resultSet.getLong("user_id");
         User user = getUserDetails(userId); // Phương thức để lấy thông tin chi tiết của người dùng
         post.setUser(user);
-        
+
         return post;
     }
 
@@ -153,7 +171,7 @@ public class PostsDAOImpl implements PostsDAO {
         if (currentUser == null || postUser == null) {
             return false;
         }
-        
+
         String sql = "SELECT COUNT(*) FROM follows WHERE follower_id = ? AND following_id = ?";
         try (Connection connection = databaseConnection.getConnection();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -164,6 +182,7 @@ public class PostsDAOImpl implements PostsDAO {
                 return resultSet.getInt(1) > 0;
             }
         } catch (SQLException e) {
+            System.err.println("Error checking follow status: " + e.getMessage());
             e.printStackTrace();
         }
         return false;

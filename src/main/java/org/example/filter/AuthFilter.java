@@ -15,7 +15,7 @@ import java.io.IOException;
 @WebFilter("/*") //Dùng để bắt tất cả các request (Tất cả các trang đều phải qua filter này)
 public class AuthFilter implements Filter {
 
-    private static final String[] PUBLIC_PAGES = {"/login", "/register", "/login.jsp", "/register.jsp"};
+    private static final String[] PUBLIC_PAGES = {"/login", "/register", "/login.jsp", "/register.jsp", "/search", "/search.jsp"};
     
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -30,7 +30,7 @@ public class AuthFilter implements Filter {
         // Kiểm tra nếu user đã đăng nhập
         boolean isLoggedIn = (session != null && session.getAttribute("user") != null); //Kiểm tra xem user có đăng nhập không
         boolean isPublicPage = containsPath(path, PUBLIC_PAGES); //Kiểm tra xem path có phải là trang login, register hoặc resource files không
-        boolean isPublicResource = path.endsWith(".css") || path.endsWith(".js"); //Kiểm tra xem path có phải là file css hoặc js không
+        boolean isPublicResource = path.endsWith(".css") || path.endsWith(".js") || path.startsWith("/img/"); //Kiểm tra xem path có phải là file css hoặc js không
         boolean isAdminPage = path.startsWith("/admin/"); //Kiểm tra xem path có phải là trang admin không
         
         if (isLoggedIn) {
@@ -38,7 +38,7 @@ public class AuthFilter implements Filter {
             String role = (String) session.getAttribute("role");
             
             // Nếu đã đăng nhập và cố truy cập trang login/register
-            if (isPublicPage) {
+            if (isPublicPage && !path.equals("/search") && !path.equals("/search.jsp")) {
                 // Chuyển hướng về trang chủ tương ứng với role
                 if ("ADMIN".equals(role)) {
                     httpResponse.sendRedirect(httpRequest.getContextPath() + "/admin/dashboard");

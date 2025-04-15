@@ -10,4 +10,5 @@ public interface UserDAO {
     User findById(Long id);
     List<User> findAll();
     User findByUsername(String username);
+    List<User> searchByUsername(String query);
 }

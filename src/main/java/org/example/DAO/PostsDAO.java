@@ -12,4 +12,5 @@ public interface PostsDAO {
     void delete(Long id);
     List<Posts> findAll();
     void update(Posts post);
+    int countActivePosts();
 }
